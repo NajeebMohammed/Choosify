@@ -6,6 +6,12 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using TwitterEngine;
+using Autofac;
+using Common.Interfaces;
+using Common.Model;
+using BLLLayer;
+using Autofac.Integration.Mvc;
 
 namespace Choosify
 {
@@ -22,6 +28,23 @@ namespace Choosify
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            var _container = new ContainerBuilder();
+            AutofacContainer.AutofacContainer autofacContainer = new AutofacContainer.AutofacContainer(_container);
+            autofacContainer.RegisterTypes();
+            _container.RegisterControllers(typeof(Choosify.WebApiApplication).Assembly);
+
+            var x = _container.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(x));
+
+            //ContainerBuilder cb = new ContainerBuilder();
+            //cb.RegisterType<ApplicationLogic>().As<IApplicationLogic>().InstancePerLifetimeScope();
+            
+            
+
+            //var twEngine = new TweetEngine();
+            //twe
+            //TweetEngine.Initialize();
+            
         }
     }
 }
